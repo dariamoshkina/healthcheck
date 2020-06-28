@@ -1,0 +1,5 @@
+requests==2.21.0
+Flask==1.0.2
+Flask-Cors==3.0.7
+Flask-SQLAlchemy==2.4.3
+flask-marshmallow==0.13.0
