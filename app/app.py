@@ -7,12 +7,16 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite://')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 CORS(app)
 
 
 class Check(db.Model):
+	__tablename__ = "checks"
+
 	check_id = db.Column(db.Integer, primary_key=True)
 	url = db.Column(db.String(2000), nullable=False)
 	status = db.Column(db.Integer, nullable=False)
@@ -47,5 +51,5 @@ def add_status():
 	db.session.commit()
 	return check_schema.jsonify(check)
 
-if __name__ == '__main__':
-	app.run(debug=True, host='0.0.0.0')
+# if __name__ == '__main__':
+# 	app.run(debug=True, host='0.0.0.0')
