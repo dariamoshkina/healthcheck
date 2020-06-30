@@ -12,9 +12,10 @@ cli = FlaskGroup(app)
 
 @cli.command('init_db')
 def init_db():
-	res = db.engine.dialect.has_table(db.engine, 'checks')
+	tablename = Check.__tablename__
+	res = db.engine.dialect.has_table(db.engine, tablename)
 	if not res:
-		print('Creating {} table'.format('checks'))
+		print('Creating {} table'.format(tablename))
 		db.drop_all()
 		db.create_all()
 		db.session.commit()
