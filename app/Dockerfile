@@ -16,6 +16,4 @@ RUN pip install --upgrade pip
 
 RUN pip install -r requirements.txt
 
-RUN ls -la
-
 ENTRYPOINT ["./entrypoint.sh"]

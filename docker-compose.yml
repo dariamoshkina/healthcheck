@@ -22,7 +22,7 @@ services:
       - POSTGRES_DB=test_db
   worker:
     build: ./worker
-    command: python worker.py
+    command: python worker.py 60 "urls.txt"
     env_file:
       - ./.env.dev    
     depends_on:
