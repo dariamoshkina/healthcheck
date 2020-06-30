@@ -1,2 +1,4 @@
 https://yandex.ru/
 https://www.google.com/
+https://stackoverflow.com/
+https://github.com/

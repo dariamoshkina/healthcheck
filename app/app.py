@@ -7,6 +7,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite://')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -40,9 +41,11 @@ def get_statuses():
 	checks = Check.query.all()
 	return jsonify(checks_schema.dump(checks))
 
+
 @app.route('/', methods=['GET'])
 def index():
 	return jsonify('Status API')
+
 
 @app.route('/status', methods=['POST'])
 @jwt_required
@@ -54,6 +57,7 @@ def add_status():
 	db.session.add(check)
 	db.session.commit()
 	return check_schema.jsonify(check)
+
 
 @app.route('/login', methods=['POST'])
 def login():

@@ -2,8 +2,6 @@ FROM python:3.6.1-alpine
 
 WORKDIR .
 ADD . .
-ADD app.py app.py
-ADD manage.py manage.py
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
