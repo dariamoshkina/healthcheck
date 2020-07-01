@@ -1,8 +1,11 @@
 import os
 import sys
-from time import sleep
 import json
 import requests
+
+from celery import Celery
+
+app = Celery('worker', broker=os.getenv('RABBITMQ_URL'))
 
 
 def get_access_token(api_username, api_password):
@@ -15,6 +18,7 @@ def get_access_token(api_username, api_password):
     return json.loads(token_response)['access_token']
 
 
+@app.task
 def check_url(url, token):
     status = requests.get(url).status_code
     payload = json.dumps({'url': url, 'status': status})
@@ -28,8 +32,9 @@ def check_url(url, token):
     )
 
 
-if __name__ == '__main__':
-    interval = float(sys.argv[1])
+@app.on_after_configure.connect
+def setup_periodic_tasks(sender, **kwargs):
+    interval = float(os.getenv('INTERVAL'))
     urls_path = os.getenv('URLS_PATH')
 
     token = get_access_token('test', 'test')
@@ -41,7 +46,5 @@ if __name__ == '__main__':
 
     print('Worker started...')
 
-    while True:
-        for url in urls:
-            check_url(url, token)
-        sleep(interval)
+    for url in urls:
+        sender.add_periodic_task(interval, check_url.s(url, token))

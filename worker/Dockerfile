@@ -8,4 +8,4 @@ RUN apk update && apk add curl
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["./entrypoint.sh", "python"]
+ENTRYPOINT ["./entrypoint.sh" ]

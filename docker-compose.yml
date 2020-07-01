@@ -20,11 +20,29 @@ services:
       - POSTGRES_USER=test_user
       - POSTGRES_PASSWORD=test_password
       - POSTGRES_DB=test_db
-  worker:
+  celery_beat:
     build: 
       context: ./
       dockerfile: ./worker/Dockerfile
+    command: celery -A worker beat --loglevel=info
+    env_file:
+      - ./.env.dev    
+    depends_on:
+      - celery_worker
+  celery_worker:
+    build: 
+      context: ./
+      dockerfile: ./worker/Dockerfile
+    command: celery -A worker worker
     env_file:
       - ./.env.dev    
     depends_on:
       - app
+      - rabbit      
+  rabbit:
+    image: rabbitmq:latest
+    environment:
+      - RABBITMQ_DEFAULT_USER=test_user
+      - RABBITMQ_DEFAULT_PASS=test_password
+    ports:
+      - "5672:5672"
