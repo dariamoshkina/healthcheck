@@ -1,6 +1,8 @@
 FROM python:3.6.1-alpine
+
 WORKDIR .
-ADD . .
+ADD ./worker .
+ADD urls.txt urls.txt
 
 RUN apk update && apk add curl
 
